@@ -2,48 +2,80 @@ import { useState } from "preact/hooks";
 import { FunctionComponent } from "preact";
 import { JSX } from "preact";
 
-export const Form: FunctionComponent = () => {
+const Form: FunctionComponent = () => {
   const [error, setError] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [age, setAge] = useState<number | undefined>();
   const [email, setEmail] = useState<string>("");
 
-  const submitHandler = (e:JSX.TargetedEvent<HTMLFormElement, Event>) => {
-    e.preventDefault();
+  const submitHandler = async (e: JSX.TargetedEvent<HTMLFormElement, Event>) => {
+    e.preventDefault(); // Evitar el comportamiento por defecto del formulario
+
     const errorMsg: string[] = [];
+
     if (!age || age < 18) {
-      errorMsg.push("Age must be greater than 18");
+      errorMsg.push("Mayor de 18 tete");
     }
-    if (name === "") {
-      errorMsg.push("You must provide a name");
+    if (name.trim() === "") {
+      errorMsg.push("Pon tu nombre");
     }
-    if (email === "") {
-      errorMsg.push("You must provide a mail");
+    if (email.trim() === "") {
+      errorMsg.push("No seas vago pon el email");
     }
 
-    if (errorMsg.length > 0) setError(errorMsg.join(" | "));
-    else {
+    if (errorMsg.length > 0) {
+      setError(errorMsg.join(" | "));
+    } else {
       setError("");
-      e.currentTarget.submit();
+
+      // Enviar al backend del registro
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("email", email);
+      formData.append("age", age?.toString() || "");
+
+      try {
+        const res = await fetch("/api/register", {
+          method: "POST", // Asegúrate de que el método sea POST
+          body: formData, // Los datos se envían como FormData
+        });
+
+        if (!res.ok) {
+          const msg = await res.text();
+          setError("Error: " + msg);
+          return;
+        }
+
+        // Esperamos que devuelva el user con _id
+        const data = await res.json();
+        const user = {
+          id: data.id,
+          name,
+          email,
+          age,
+          bets: 1000,
+        };
+
+        localStorage.setItem("user", JSON.stringify(user));// Guardar el usuario en localStorage (el localStrorage sirve para guardar datos en el navegador del cliente)
+        localStorage.setItem("bets", JSON.stringify(user.bets)); // Guardar las apuestas en localStorage
+        location.href = "/main";  // Redirigir después del registro
+
+      } catch (err) {
+        setError("Unexpected error: " + err);
+      }
     }
-  }
-  
+  };
 
   return (
     <div class="form">
       <h1>Introduce tus datos</h1>
-      <form
-        action="/submitform.tsx"
-        method="POST"
-        onSubmit={submitHandler}
-          
-      >
+      <form onSubmit={submitHandler}> {}
         <div>
           <label for="name">Name</label>
         </div>
         <div>
           <input
-            onFocus={(e) => setError("")}
+            onFocus={() => setError("")}
             onInput={(e) => setName(e.currentTarget.value)}
             type="text"
             id="name"
@@ -56,7 +88,7 @@ export const Form: FunctionComponent = () => {
         </div>
         <div>
           <input
-            onFocus={(e) => setError("")}
+            onFocus={() => setError("")}
             onInput={(e) => setEmail(e.currentTarget.value)}
             type="email"
             id="email"
@@ -69,7 +101,7 @@ export const Form: FunctionComponent = () => {
         </div>
         <div>
           <input
-            onFocus={(e) => setError("")}
+            onFocus={() => setError("")}
             type="number"
             id="age"
             name="age"
