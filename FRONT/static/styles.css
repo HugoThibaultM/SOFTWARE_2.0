@@ -1,5 +1,4 @@
 
-
 body {
   font-family: 'Poppins', sans-serif;
   margin: 0;
@@ -7,6 +6,9 @@ body {
   box-sizing: border-box;
   background-color: #f3f4f6;
   color: #333;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Esto garantiza que el body siempre ocupe al menos el 100% de la altura de la ventana */
 }
 
 .form {
@@ -87,31 +89,76 @@ body {
       background-color: #ff4e33;
     }
   }
+ }
 }
+
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
+
+.homeSelector{
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: normal;
+  flex-direction: row;
+  background-color: rgb(226, 250, 195);
+}
+
+.selector h1 {
+  font-size: 3rem; 
+  font-weight: 700;
+  text-align: center;
+  color: #1f2937; 
+  margin-bottom: 2rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  background-color: #10b981; 
+  color: #fff;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+}
+
+.btn:hover {
+  background-color: #059669; 
+  transform: scale(1.03);
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn:focus {
+  outline: 2px solid #86efac;
+  outline-offset: 2px;
+}
+
 
 .footer {
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: bottom;
-  background-color: #f3f4f6;
-  margin-top: auto; 
-}
-.homeSelector{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  margin-top: 2rem;
   padding: 1rem;
-  background-color: #fff;
-  border-radius: 0.5rem;
-  box-shadow: 0 -1px 10px rgba(0, 0, 0, 0.1);
-  h1 {
-    text-align: center;
-    margin-bottom: 2rem;
-    font-size: 2rem;
-    color: #333;
-  }
+  background-color: #404f4d;
+  color: #f9fafb;
+  font-family: 'Poppins', sans-serif;
 }
+
+.footer p {
+  font-family: 'Arial', sans-serif; 
+  font-size: 1.1rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  text-align: center;
+}
+
