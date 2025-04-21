@@ -18,19 +18,25 @@ export const handler: Handlers = {
       return new Response("Invalid age", { status: 400 });
     }
 
-    const user = {
-      name,
-      email,
-      age,
-      bets: 1000, // Valor inicial que estás usando
-    };
-
     try {
+      const existingUser = await UsersCollection.findOne({ email });
+      if (existingUser) {
+        return new Response("Email ya registrado", { status: 409 }); 
+      }
+
+      const user = {
+        name,
+        email,
+        age,
+        bets: 1000,
+      };
+
       const inserted = await UsersCollection.insertOne(user);
       return new Response(JSON.stringify({ id: inserted }), {
         status: 200,
         headers: { "Content-Type": "application/json" },
       });
+
     } catch (err) {
       console.error("Error al insertar en Mongo:", err);
       return new Response("Database error", { status: 500 });

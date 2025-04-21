@@ -1,9 +1,11 @@
-import Form from "../islands/Form.tsx";
-
+import HomeSelector from "../components/HomeSelector.tsx";
 export default function Home() {
   return (
-    <div class="">
-      <Form />
+    <div class="homeSelector">
+      <HomeSelector />
+      <div class="footer">
+        <p>Ingenieria del Software</p>
+      </div>
     </div>
   );
 }

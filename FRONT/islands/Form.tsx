@@ -9,7 +9,7 @@ const Form: FunctionComponent = () => {
   const [email, setEmail] = useState<string>("");
 
   const submitHandler = async (e: JSX.TargetedEvent<HTMLFormElement, Event>) => {
-    e.preventDefault(); // Evitar el comportamiento por defecto del formulario
+    e.preventDefault(); 
 
     const errorMsg: string[] = [];
 
@@ -36,7 +36,7 @@ const Form: FunctionComponent = () => {
 
       try {
         const res = await fetch("/api/register", {
-          method: "POST", // Asegúrate de que el método sea POST
+          method: "POST", // Método POST para enviar datos al servidor
           body: formData, // Los datos se envían como FormData
         });
 
